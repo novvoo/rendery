@@ -418,8 +418,8 @@ export default function GenericPreview({ data, title, theme, customTypography }:
   const fontSize = customTypography?.fontSize || theme?.typography.fontSize || '9.5pt';
   const lineHeight = customTypography?.lineHeight || theme?.typography.lineHeight || '1.5';
   const headingFont = customTypography?.headingFont || theme?.typography.headingFont || fontFamily;
-  const headingFontSize = theme?.typography.headingFontSize;
-  const headingLineHeight = theme?.typography.headingLineHeight || lineHeight;
+  const headingFontSize = customTypography?.headingFontSize || theme?.typography.headingFontSize;
+  const headingLineHeight = customTypography?.headingLineHeight || theme?.typography.headingLineHeight || lineHeight;
 
   // 检测顶层结构，提供更好的分组显示
   const topLevelKeys = Object.keys(data);

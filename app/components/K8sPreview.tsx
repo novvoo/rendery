@@ -843,8 +843,8 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
   const fontSize = customTypography?.fontSize || theme?.typography.fontSize || '9.5pt';
   const lineHeight = customTypography?.lineHeight || theme?.typography.lineHeight || '1.5';
   const headingFont = customTypography?.headingFont || theme?.typography.headingFont || fontFamily;
-  const headingFontSize = theme?.typography.headingFontSize;
-  const headingLineHeight = theme?.typography.headingLineHeight || lineHeight;
+  const headingFontSize = customTypography?.headingFontSize || theme?.typography.headingFontSize;
+  const headingLineHeight = customTypography?.headingLineHeight || theme?.typography.headingLineHeight || lineHeight;
 
   // Handle cases where resource structure might be incomplete
   if (!resource || typeof resource !== 'object') {
