@@ -1,0 +1,49 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  annotations:
+    meta.helm.sh/release-name: channel-advisor-app
+    meta.helm.sh/release-namespace: mp-biz
+  creationTimestamp: "2025-05-15T18:10:26Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: channel-advisor-app
+  namespace: mp-biz
+  resourceVersion: "890948024"
+  uid: 2fb6831c-58d2-4c11-a5e3-42e22f277a91
+spec:
+  gateways:
+  - istio-system/orangeconnex
+  hosts:
+  - 3ppca-test.orangeconnex.com
+  http:
+  - corsPolicy:
+      allowCredentials: false
+      allowHeaders:
+      - access-control-allow-headers
+      - access-control-allow-origin
+      - content-type
+      - Accept-Language
+      allowMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+      allowOrigins:
+      - regex: https?:\/\/channeladvisor.com|https?:\/\/.*[.]channeladvisor.com|https?:\/\/orangeconnex.com|https?:\/\/.*[.]orangeconnex.com
+      maxAge: 300s
+    route:
+    - destination:
+        host: channel-advisor-app
+        port:
+          number: 80
+      headers:
+        response:
+          add:
+            content-security-policy: block-all-mixed-content; frame-ancestors self https://channeladvisor.com https://*.channeladvisor.com
+            strict-transport-security: max-age=31536000; includeSubDomains
+            x-content-type-options: nosniff
+            x-frame-options: SAMEORIGIN

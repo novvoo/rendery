@@ -1,0 +1,214 @@
+# application-config.yaml
+# 主配置：微服务应用配置（支持多环境）
+# 生成时间: 2025-12-25
+
+# 默认配置（作为基础模板）
+_defaults: &defaults
+  logging:
+    level: INFO
+    format: json
+    outputs:
+      - stdout
+      - file:///var/log/app.log
+  metrics:
+    enabled: true
+    endpoint: /metrics
+    prometheus: true
+  database:
+    pool_size: 10
+    timeout: 30s
+    ssl_mode: require
+  cache:
+    type: redis
+    ttl: 3600
+  feature_flags:
+    new_checkout: false
+    dark_mode: true
+
+# ===== 开发环境配置 =====
+dev:
+  <<: *defaults
+  logging:
+    level: DEBUG
+    outputs:
+      - stdout
+  database:
+    host: localhost
+    port: 5432
+    name: app_dev
+    user: dev_user
+    password: "dev_password_123"
+  cache:
+    host: localhost
+    port: 6379
+  feature_flags:
+    new_checkout: true  # 开发环境启用新功能
+
+# ===== 预发布环境配置 =====
+staging:
+  <<: *defaults
+  database:
+    host: db-staging.internal
+    port: 5432
+    name: app_staging
+    user: staging_user
+    password: "${STAGING_DB_PASSWORD}"  # 从环境变量注入
+  cache:
+    host: redis-staging.internal
+    port: 6380
+    cluster_mode: true
+    nodes:
+      - host: redis-staging-01
+        port: 6380
+      - host: redis-staging-02
+        port: 6380
+  observability:
+    tracing:
+      enabled: true
+      provider: jaeger
+      endpoint: http://jaeger-staging:14268/api/traces
+
+# ===== 生产环境配置 =====
+prod:
+  <<: *defaults
+  logging:
+    level: WARN
+    outputs:
+      - file:///var/log/app.prod.log
+      - syslog://prod-logger.internal:514
+  database:
+    host: prod-db-cluster.internal
+    port: 5432
+    name: app_production
+    user: prod_user
+    password: "${PROD_DB_PASSWORD}"
+    replicas:
+      - host: prod-db-replica-01
+        port: 5432
+      - host: prod-db-replica-02
+        port: 5432
+  cache:
+    host: redis-prod-cluster.internal
+    port: 6381
+    cluster_mode: true
+    sentinel:
+      masters:
+        - name: cache-master-a
+          quorum: 2
+      sentinels:
+        - host: sentinel-01
+          port: 26379
+        - host: sentinel-02
+          port: 26379
+        - host: sentinel-03
+          port: 26379
+  security:
+    tls:
+      enabled: true
+      cert_file: /etc/ssl/certs/app.crt
+      key_file: /etc/ssl/private/app.key
+    cors:
+      allowed_origins:
+        - https://app.example.com
+        - https://admin.example.com
+      allowed_methods: [GET, POST, PUT, DELETE]
+      max_age: 86400
+  autoscaling:
+    min_replicas: 3
+    max_replicas: 20
+    cpu_threshold: 70
+    memory_threshold: 80
+
+# --- 分隔符：第二个文档：部署清单 ---
+---
+# k8s-deployment-config
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-backend
+  namespace: production
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: app-backend
+  template:
+    metadata:
+      labels:
+        app: app-backend
+    spec:
+      containers:
+        - name: app-container
+          image: registry.example.com/app-backend:v1.8.2
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-configmap
+            - secretRef:
+                name: app-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+# --- 第三个文档：CI/CD 管道配置 ---
+---
+# cicd-pipeline.yaml
+pipeline:
+  stages:
+    - name: lint
+      image: node:20-alpine
+      commands:
+        - npm install
+        - npm run lint
+    - name: test
+      image: golang:1.23
+      commands:
+        - go test -v ./...
+      parallel:
+        - name: unit-tests
+          commands: [go test -short ./...]
+        - name: integration-tests
+          services:
+            - name: postgres
+              image: postgres:15
+              env:
+                POSTGRES_DB: testdb
+                POSTGRES_USER: test
+                POSTGRES_PASSWORD: test123
+          commands: [./run-integration-tests.sh]
+    - name: build-and-push
+      when:
+        branch: main
+      steps:
+        - build_docker:
+            dockerfile: ./Dockerfile
+            image: registry.example.com/app-backend:${DRONE_COMMIT_SHA}
+        - push_image:
+            registry: registry.example.com
+            username: "${DOCKER_USER}"
+            password: "${DOCKER_PASS}"
+    - name: deploy-prod
+      when:
+        tag: /^v\d+\.\d+\.\d+/
+      trigger:
+        type: manual
+        approvers: ["ops-team", "security-team"]
+      script: |
+        kubectl set image deployment/app-backend app-container=registry.example.com/app-backend:${DRONE_TAG}

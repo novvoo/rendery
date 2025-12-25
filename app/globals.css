@@ -1,0 +1,113 @@
+/* 清理后的全局样式 */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 为MUI Box组件确保良好的文字可见性 */
+.MuiBox-root {
+  color: inherit;
+}
+
+/* 确保根元素背景色正确 */
+html, body, #__next {
+  background-color: #ffffff !important;
+}
+
+/* 提升整体文字对比度 */
+* {
+  box-sizing: border-box;
+}
+
+/* Print styles for CV preview */
+@media print {
+  @page {
+    margin: 15mm 20mm; /* 默认：上下边距15mm，左右边距20mm */
+    size: A4;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body * {
+    visibility: hidden;
+  }
+  
+  .cv-preview-container,
+  .cv-preview-container * {
+    visibility: visible;
+  }
+  
+  .cv-preview-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  /* CV专用页面边距 - 更大的左右边距 */
+  body:has(.cv-preview-container) {
+    --cv-page-margin: 15mm 35mm; /* 上下15mm，左右35mm */
+  }
+  
+  @page :first {
+    margin: var(--cv-page-margin, 15mm 35mm);
+  }
+  
+  @supports selector(:has(*)) {
+    @page {
+      margin: 15mm 35mm; /* CV的左右边距增加到35mm */
+    }
+  }
+  
+  /* 通用预览容器 */
+  .generic-preview-container,
+  .generic-preview-container * {
+    visibility: visible;
+  }
+  
+  .generic-preview-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* K8s预览容器 */
+  .k8s-preview-container,
+  .k8s-preview-container * {
+    visibility: visible;
+  }
+  
+  .k8s-preview-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
