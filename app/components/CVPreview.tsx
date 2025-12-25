@@ -18,6 +18,8 @@ interface CVPreviewProps {
     fontSize?: string;
     lineHeight?: string;
     headingFont?: string;
+    headingFontSize?: string;
+    headingLineHeight?: string;
   };
 }
 
@@ -26,7 +28,7 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
   if (!data || typeof data !== 'object') {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography variant="body1" color="error">
+        <Typography variant="body1" color="error" sx={{ fontSize: '0.9em' }}>
           无效的 CV 数据格式
         </Typography>
       </Box>
@@ -39,7 +41,7 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
   if (!cv || !cv.name) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography variant="body1" color="error">
+        <Typography variant="body1" color="error" sx={{ fontSize: '0.9em' }}>
           CV 数据缺少必需的 name 字段
         </Typography>
       </Box>
@@ -80,6 +82,8 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
     fontSize: customTypography?.fontSize || typography.fontSize,
     lineHeight: customTypography?.lineHeight || typography.lineHeight,
     headingFont: customTypography?.headingFont || typography.headingFont || typography.fontFamily,
+    headingFontSize: customTypography?.headingFontSize || typography.headingFontSize,
+    headingLineHeight: customTypography?.headingLineHeight || typography.headingLineHeight || typography.lineHeight,
   };
 
   const singleDateTemplate = 'MONTH_ABBREVIATION YEAR';
@@ -144,6 +148,15 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
         color: colors.text || colors.body,
         boxShadow: 1,
         textAlign: 'left',
+        '& .MuiTypography-root': {
+          fontFamily: 'inherit',
+          lineHeight: 'inherit',
+        },
+        '& .MuiTypography-h3, & .MuiTypography-h5, & .MuiTypography-h6': {
+          fontFamily: finalTypography.headingFont,
+          fontSize: finalTypography.headingFontSize || 'inherit',
+          lineHeight: finalTypography.headingLineHeight,
+        },
       }}
     >
       {/* 头部 */}
@@ -182,19 +195,19 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
           sx={{ 
             gap: 1,
             color: colors.connections,
-            fontSize: '9pt',
+            fontSize: '0.9em',
           }}
         >
           {cv.location && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
               <LocationOnIcon sx={{ fontSize: '14px' }} />
-              <Typography variant="body2" sx={{ fontSize: '9pt' }}>{cv.location}</Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.9em' }}>{cv.location}</Typography>
             </Box>
           )}
           {cv.email && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
               <EmailIcon sx={{ fontSize: '14px' }} />
-              <Link href={`mailto:${Array.isArray(cv.email) ? cv.email[0] : cv.email}`} color="inherit" sx={{ fontSize: '9pt' }}>
+              <Link href={`mailto:${Array.isArray(cv.email) ? cv.email[0] : cv.email}`} color="inherit" sx={{ fontSize: '0.9em' }}>
                 {Array.isArray(cv.email) ? cv.email[0] : cv.email}
               </Link>
             </Box>
@@ -202,13 +215,13 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
           {cv.phone && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
               <PhoneIcon sx={{ fontSize: '14px' }} />
-              <Typography variant="body2" sx={{ fontSize: '9pt' }}>{Array.isArray(cv.phone) ? cv.phone[0] : cv.phone}</Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.9em' }}>{Array.isArray(cv.phone) ? cv.phone[0] : cv.phone}</Typography>
             </Box>
           )}
           {cv.website && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
               <LanguageIcon sx={{ fontSize: '14px' }} />
-              <Link href={Array.isArray(cv.website) ? cv.website[0] : cv.website} target="_blank" color="inherit" sx={{ fontSize: '9pt' }}>
+              <Link href={Array.isArray(cv.website) ? cv.website[0] : cv.website} target="_blank" color="inherit" sx={{ fontSize: '0.9em' }}>
                 {Array.isArray(cv.website) ? cv.website[0] : cv.website}
               </Link>
             </Box>
@@ -217,7 +230,7 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
             <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
               {social.network === 'LinkedIn' && <LinkedInIcon sx={{ fontSize: '14px' }} />}
               {social.network === 'GitHub' && <GitHubIcon sx={{ fontSize: '14px' }} />}
-              <Link href={`https://${social.network.toLowerCase()}.com/${social.username}`} target="_blank" color="inherit" sx={{ fontSize: '9pt' }}>
+              <Link href={`https://${social.network.toLowerCase()}.com/${social.username}`} target="_blank" color="inherit" sx={{ fontSize: '0.9em' }}>
                 {social.username}
               </Link>
             </Box>
@@ -243,7 +256,7 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
                 sx={{ 
                   fontWeight: 'bold', 
                   color: colors.section_titles,
-                  fontSize: '13pt',
+                  fontSize: '1.3em',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   fontFamily: finalTypography.headingFont,
@@ -264,7 +277,7 @@ export default function CVPreview({ data, customTypography }: CVPreviewProps) {
                   console.error(`Error rendering entry in section "${title}":`, error, entry);
                   return (
                     <Box key={index} sx={{ mb: 1.5 }}>
-                      <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+                      <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
                         渲染条目时出错
                       </Typography>
                     </Box>
@@ -297,7 +310,7 @@ function renderEntry(
   // 验证 entry
   if (!entry || (typeof entry !== 'object' && typeof entry !== 'string')) {
     return (
-      <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+      <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
         无效的条目数据
       </Typography>
     );
@@ -309,7 +322,7 @@ function renderEntry(
     // 验证必需字段
     if (!edu.institution || !edu.degree || !edu.area) {
       return (
-        <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+        <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
           教育经历缺少必需字段
         </Typography>
       );
@@ -320,23 +333,23 @@ function renderEntry(
     return (
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, alignItems: 'baseline' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '10.5pt' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.05em' }}>
             {edu.institution}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
             {dateStr}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, alignItems: 'baseline' }}>
-          <Typography variant="body1" sx={{ fontSize: '9.5pt' }}>
+          <Typography variant="body1" sx={{ fontSize: '0.95em' }}>
             {edu.degree} - {edu.area}{(edu as any).GPA ? ` (GPA: ${(edu as any).GPA})` : ''}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
             {edu.location}
           </Typography>
         </Box>
         {edu.summary && (
-          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '9.5pt' }}>
+          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '0.95em' }}>
             {edu.summary}
           </Typography>
         )}
@@ -347,7 +360,7 @@ function renderEntry(
               if (typeof highlight === 'object' && highlight.GPA) {
                 return (
                   <li key={i}>
-                    <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>
+                    <Typography variant="body2" sx={{ fontSize: '0.95em' }}>
                       GPA: {highlight.GPA}
                     </Typography>
                   </li>
@@ -355,7 +368,7 @@ function renderEntry(
               }
               return (
                 <li key={i}>
-                  <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>
+                  <Typography variant="body2" sx={{ fontSize: '0.95em' }}>
                     {typeof highlight === 'string' ? highlight : JSON.stringify(highlight)}
                   </Typography>
                 </li>
@@ -374,7 +387,7 @@ function renderEntry(
     // 验证必需字段
     if (!exp.company || !exp.position) {
       return (
-        <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+        <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
           工作经历缺少必需字段
         </Typography>
       );
@@ -386,28 +399,28 @@ function renderEntry(
     return (
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, alignItems: 'baseline' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '10.5pt' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.05em' }}>
             {exp.company}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
             {dateStr}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, alignItems: 'baseline' }}>
-          <Typography variant="body1" sx={{ fontSize: '9.5pt', fontStyle: 'italic' }}>
+          <Typography variant="body1" sx={{ fontSize: '0.95em', fontStyle: 'italic' }}>
             {exp.position}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
             {exp.location}
           </Typography>
         </Box>
         {timeSpan && (
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: '8.5pt' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: '0.85em' }}>
             {timeSpan}
           </Typography>
         )}
         {exp.summary && (
-          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '9.5pt' }}>
+          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '0.95em' }}>
             {exp.summary}
           </Typography>
         )}
@@ -415,7 +428,7 @@ function renderEntry(
           <Box component="ul" sx={{ mt: 0.5, pl: 2.5, mb: 0, '& li': { mb: 0.2 } }}>
             {exp.highlights.map((highlight: any, i: number) => (
               <li key={i}>
-                <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>
+                <Typography variant="body2" sx={{ fontSize: '0.95em' }}>
                   {typeof highlight === 'string' ? highlight : JSON.stringify(highlight)}
                 </Typography>
               </li>
@@ -433,7 +446,7 @@ function renderEntry(
     // 验证必需字段
     if (!proj.name) {
       return (
-        <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+        <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
           项目缺少名称
         </Typography>
       );
@@ -448,17 +461,17 @@ function renderEntry(
     return (
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, alignItems: 'baseline' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '10.5pt' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.05em' }}>
             {proj.name}
           </Typography>
           {dateStr && (
-            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt' }}>
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
               {dateStr}
             </Typography>
           )}
         </Box>
         {proj.summary && (
-          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '9.5pt' }}>
+          <Typography variant="body2" sx={{ mb: 0.5, fontSize: '0.95em' }}>
             {proj.summary}
           </Typography>
         )}
@@ -466,7 +479,7 @@ function renderEntry(
           <Box component="ul" sx={{ mt: 0.5, pl: 2.5, mb: 0, '& li': { mb: 0.2 } }}>
             {proj.highlights.map((highlight: any, i: number) => (
               <li key={i}>
-                <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>
+                <Typography variant="body2" sx={{ fontSize: '0.95em' }}>
                   {typeof highlight === 'string' ? highlight : JSON.stringify(highlight)}
                 </Typography>
               </li>
@@ -484,7 +497,7 @@ function renderEntry(
     // 验证必需字段
     if (!pub.title || !pub.authors || !Array.isArray(pub.authors)) {
       return (
-        <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+        <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
           出版物数据格式错误
         </Typography>
       );
@@ -494,19 +507,19 @@ function renderEntry(
     
     return (
       <Box>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '10.5pt', mb: 0.3 }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.05em', mb: 0.3 }}>
           {pub.title}
         </Typography>
-        <Typography variant="body2" sx={{ fontSize: '9.5pt', mb: 0.3 }}>
+        <Typography variant="body2" sx={{ fontSize: '0.95em', mb: 0.3 }}>
           {pub.authors.join(', ')}
         </Typography>
         {pub.journal && (
-          <Typography variant="body2" sx={{ fontSize: '9.5pt', fontStyle: 'italic' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.95em', fontStyle: 'italic' }}>
             {pub.journal}{dateStr && ` (${dateStr})`}
           </Typography>
         )}
         {pub.doi && (
-          <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.95em' }}>
             DOI: <Link href={`https://doi.org/${pub.doi}`} target="_blank">{pub.doi}</Link>
           </Typography>
         )}
@@ -521,7 +534,7 @@ function renderEntry(
     // 验证必需字段
     if (!skill.label || !skill.details) {
       return (
-        <Typography variant="body2" color="error" sx={{ fontSize: '9pt' }}>
+        <Typography variant="body2" color="error" sx={{ fontSize: '0.9em' }}>
           技能数据不完整
         </Typography>
       );
@@ -529,10 +542,10 @@ function renderEntry(
     
     return (
       <Box sx={{ display: 'flex', gap: 0.8, mb: 0.3 }}>
-        <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '100px', fontSize: '9.5pt' }}>
+        <Typography variant="body1" sx={{ fontWeight: 'bold', minWidth: '100px', fontSize: '0.95em' }}>
           {skill.label}:
         </Typography>
-        <Typography variant="body1" sx={{ fontSize: '9.5pt' }}>{skill.details}</Typography>
+        <Typography variant="body1" sx={{ fontSize: '0.95em' }}>{skill.details}</Typography>
       </Box>
     );
   }
@@ -545,18 +558,18 @@ function renderEntry(
       return null;
     }
     
-    return <Typography variant="body2" sx={{ fontSize: '9.5pt', mb: 0.2 }}>• {bullet.bullet}</Typography>;
+    return <Typography variant="body2" sx={{ fontSize: '0.95em', mb: 0.2 }}>• {bullet.bullet}</Typography>;
   }
 
   // 默认文本条目
   if (typeof entry === 'string') {
-    return <Typography variant="body2" sx={{ fontSize: '9.5pt' }}>{entry}</Typography>;
+    return <Typography variant="body2" sx={{ fontSize: '0.95em' }}>{entry}</Typography>;
   }
 
   // 未知类型
   console.warn('Unknown entry type:', entry);
   return (
-    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '9pt', fontStyle: 'italic' }}>
+    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em', fontStyle: 'italic' }}>
       未知条目类型
     </Typography>
   );

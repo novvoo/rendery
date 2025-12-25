@@ -43,6 +43,8 @@ interface K8sPreviewProps {
     fontSize?: string;
     lineHeight?: string;
     headingFont?: string;
+    headingFontSize?: string;
+    headingLineHeight?: string;
   };
 }
 
@@ -841,6 +843,8 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
   const fontSize = customTypography?.fontSize || theme?.typography.fontSize || '9.5pt';
   const lineHeight = customTypography?.lineHeight || theme?.typography.lineHeight || '1.5';
   const headingFont = customTypography?.headingFont || theme?.typography.headingFont || fontFamily;
+  const headingFontSize = theme?.typography.headingFontSize;
+  const headingLineHeight = theme?.typography.headingLineHeight || lineHeight;
 
   // Handle cases where resource structure might be incomplete
   if (!resource || typeof resource !== 'object') {
@@ -863,14 +867,23 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
         color: textColor, 
         fontFamily, 
         fontSize, 
-        lineHeight 
+        lineHeight,
+        '& .MuiTypography-root': {
+          fontFamily: 'inherit',
+          lineHeight: 'inherit',
+        },
+        '& .MuiTypography-h5, & .MuiTypography-h6': {
+          fontFamily: headingFont,
+          fontSize: headingFontSize || 'inherit',
+          lineHeight: headingLineHeight,
+        },
       }}>
         {/* 头部信息 */}
         <Paper elevation={1} sx={{ p: 1.5, mx: 3, mt: 3, mb: 1.5, bgcolor: primaryColor, color: 'white' }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '16pt', fontFamily: headingFont }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.6em', fontFamily: headingFont }}>
             Kubernetes 资源清单
           </Typography>
-          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '9pt' }}>
+          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.9em' }}>
             共 {resource.length} 个资源
           </Typography>
         </Paper>
@@ -962,7 +975,16 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
       color: textColor, 
       fontFamily, 
       fontSize, 
-      lineHeight 
+      lineHeight,
+      '& .MuiTypography-root': {
+        fontFamily: 'inherit',
+        lineHeight: 'inherit',
+      },
+      '& .MuiTypography-h5, & .MuiTypography-h6': {
+        fontFamily: headingFont,
+        fontSize: headingFontSize || 'inherit',
+        lineHeight: headingLineHeight,
+      },
     }}>
       {/* 资源头部 */}
       <Paper elevation={1} sx={{ p: 1.5, mx: 3, mt: 3, mb: 1.5, bgcolor: primaryColor, color: 'white' }}>
@@ -976,34 +998,34 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
               fontSize: '13px',
             }} 
           />
-          <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '16pt', fontFamily: headingFont }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.6em', fontFamily: headingFont }}>
             {metadata.name}
           </Typography>
         </Stack>
-        <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '9pt' }}>
+        <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.9em' }}>
           API Version: {apiVersion}
         </Typography>
       </Paper>
 
       {/* 元数据 */}
       <Paper elevation={1} sx={{ p: 1.5, mx: 3, mb: 1.5, borderColor, borderWidth: 1, borderStyle: 'solid' }}>
-        <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '13pt', fontFamily: headingFont }}>
+        <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '1.3em', fontFamily: headingFont }}>
           Metadata
         </Typography>
         <Divider sx={{ mb: 1, borderColor }} />
         
         <Stack spacing={1}>
           <Box>
-            <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '9pt' }}>Name:</Typography>
-            <Typography variant="body1" sx={{ fontFamily: 'monospace', fontSize: '9.5pt' }}>
+            <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '0.9em' }}>Name:</Typography>
+            <Typography variant="body1" sx={{ fontFamily: 'monospace', fontSize: '0.95em' }}>
               {metadata.name}
             </Typography>
           </Box>
           
           {metadata.namespace && (
             <Box>
-              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '9pt' }}>Namespace:</Typography>
-              <Typography variant="body1" sx={{ fontFamily: 'monospace', fontSize: '9.5pt' }}>
+              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '0.9em' }}>Namespace:</Typography>
+              <Typography variant="body1" sx={{ fontFamily: 'monospace', fontSize: '0.95em' }}>
                 {metadata.namespace}
               </Typography>
             </Box>
@@ -1011,7 +1033,7 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
           
           {metadata.labels && Object.keys(metadata.labels).length > 0 && (
             <Box>
-              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '9pt' }} gutterBottom>
+              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '0.9em' }} gutterBottom>
                 Labels:
               </Typography>
               <Stack direction="row" spacing={0.5} flexWrap="wrap" sx={{ gap: 0.5 }}>
@@ -1030,7 +1052,7 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
           
           {metadata.annotations && Object.keys(metadata.annotations).length > 0 && (
             <Box>
-              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '9pt' }} gutterBottom>
+              <Typography variant="body2" sx={{ color: secondaryColor, fontSize: '0.9em' }} gutterBottom>
                 Annotations:
               </Typography>
               <Stack direction="row" spacing={0.5} flexWrap="wrap" sx={{ gap: 0.5 }}>
@@ -1052,7 +1074,7 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
       {/* Spec */}
       {spec && (
         <Paper elevation={1} sx={{ p: 1.5, mx: 3, mb: 1.5, borderColor, borderWidth: 1, borderStyle: 'solid' }}>
-          <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '13pt', fontFamily: headingFont }}>
+          <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '1.3em', fontFamily: headingFont }}>
             {getResourceIcon(kind)}
             Spec
           </Typography>
@@ -1092,7 +1114,7 @@ export default function K8sPreview({ resource, theme, customTypography }: K8sPre
       {/* Data (for ConfigMap/Secret) */}
       {data && (
         <Paper elevation={1} sx={{ p: 1.5, mx: 3, mb: 3, borderColor, borderWidth: 1, borderStyle: 'solid' }}>
-          <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '13pt', fontFamily: headingFont }}>
+          <Typography variant="h6" gutterBottom sx={{ color: primaryColor, fontWeight: 'bold', fontSize: '1.3em', fontFamily: headingFont }}>
             {getResourceIcon(kind)}
             数据
           </Typography>

@@ -523,6 +523,8 @@ function EditorPageContent() {
   const [customFontSize, setCustomFontSize] = useState<string>('');
   const [customLineHeight, setCustomLineHeight] = useState<string>('');
   const [customHeadingFont, setCustomHeadingFont] = useState<string>('');
+  const [customHeadingFontSize, setCustomHeadingFontSize] = useState<string>('');
+  const [customHeadingLineHeight, setCustomHeadingLineHeight] = useState<string>('');
   
   // 保存自定义字体设置到 localStorage
   useEffect(() => {
@@ -531,7 +533,9 @@ function EditorPageContent() {
     localStorage.setItem('custom-font-size', customFontSize);
     localStorage.setItem('custom-line-height', customLineHeight);
     localStorage.setItem('custom-heading-font', customHeadingFont);
-  }, [customFontFamily, customFontSize, customLineHeight, customHeadingFont, mounted]);
+    localStorage.setItem('custom-heading-font-size', customHeadingFontSize);
+    localStorage.setItem('custom-heading-line-height', customHeadingLineHeight);
+  }, [customFontFamily, customFontSize, customLineHeight, customHeadingFont, customHeadingFontSize, customHeadingLineHeight, mounted]);
   
   const allThemes = getAllThemes();
 
@@ -567,11 +571,15 @@ function EditorPageContent() {
     const savedFontSize = localStorage.getItem('custom-font-size');
     const savedLineHeight = localStorage.getItem('custom-line-height');
     const savedHeadingFont = localStorage.getItem('custom-heading-font');
+    const savedHeadingFontSize = localStorage.getItem('custom-heading-font-size');
+    const savedHeadingLineHeight = localStorage.getItem('custom-heading-line-height');
     
     if (savedFontFamily) setCustomFontFamily(savedFontFamily);
     if (savedFontSize) setCustomFontSize(savedFontSize);
     if (savedLineHeight) setCustomLineHeight(savedLineHeight);
     if (savedHeadingFont) setCustomHeadingFont(savedHeadingFont);
+    if (savedHeadingFontSize) setCustomHeadingFontSize(savedHeadingFontSize);
+    if (savedHeadingLineHeight) setCustomHeadingLineHeight(savedHeadingLineHeight);
   }, [searchParams, mounted]);
 
   useEffect(() => {
@@ -975,15 +983,28 @@ function EditorPageContent() {
               onChange={(e) => setCustomFontFamily(e.target.value)}
             >
               <MenuItem value="">默认</MenuItem>
-              <MenuItem value='"Arial", "Noto Sans SC", sans-serif'>Arial</MenuItem>
-              <MenuItem value='"Helvetica", "Noto Sans SC", sans-serif'>Helvetica</MenuItem>
-              <MenuItem value='"Times New Roman", "Noto Serif SC", serif'>Times New Roman</MenuItem>
+              <MenuItem value='var(--font-inter), "Noto Sans SC", sans-serif'>Inter</MenuItem>
+              <MenuItem value='var(--font-roboto), "Noto Sans SC", sans-serif'>Roboto</MenuItem>
+              <MenuItem value='var(--font-source-sans-3), "Noto Sans SC", sans-serif'>Source Sans 3</MenuItem>
+              <MenuItem value='var(--font-open-sans), "Noto Sans SC", sans-serif'>Open Sans</MenuItem>
+              <MenuItem value='var(--font-lato), "Noto Sans SC", sans-serif'>Lato</MenuItem>
+              <MenuItem value='var(--font-montserrat), "Noto Sans SC", sans-serif'>Montserrat</MenuItem>
+              <MenuItem value='var(--font-raleway), "Noto Sans SC", sans-serif'>Raleway</MenuItem>
+              <MenuItem value='var(--font-poppins), "Noto Sans SC", sans-serif'>Poppins</MenuItem>
+              <MenuItem value='var(--font-playfair-display), "Noto Serif SC", serif'>Playfair Display</MenuItem>
+              <MenuItem value='var(--font-merriweather), "Noto Serif SC", serif'>Merriweather</MenuItem>
+              <MenuItem value='var(--font-lora), "Noto Serif SC", serif'>Lora</MenuItem>
+              <MenuItem value='var(--font-crimson-text), "Noto Serif SC", serif'>Crimson Text</MenuItem>
+              <MenuItem value='var(--font-libre-baskerville), "Noto Serif SC", serif'>Libre Baskerville</MenuItem>
+              <MenuItem value='var(--font-noto-sans-sc), sans-serif'>思源黑体</MenuItem>
+              <MenuItem value='var(--font-noto-serif-sc), serif'>思源宋体</MenuItem>
+              <MenuItem value='"PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif'>苹方/微软雅黑</MenuItem>
+              <MenuItem value='"STKaiti", "KaiTi", "Noto Serif SC", serif'>楷体</MenuItem>
               <MenuItem value='"Georgia", "Noto Serif SC", serif'>Georgia</MenuItem>
-              <MenuItem value='"Source Sans 3", "Noto Sans SC", sans-serif'>Source Sans 3</MenuItem>
-              <MenuItem value='"Inter", "Noto Sans SC", sans-serif'>Inter</MenuItem>
-              <MenuItem value='"Roboto", "Noto Sans SC", sans-serif'>Roboto</MenuItem>
-              <MenuItem value='"Poppins", "Noto Sans SC", sans-serif'>Poppins</MenuItem>
-              <MenuItem value='"Courier New", monospace'>Courier New</MenuItem>
+              <MenuItem value='"Times New Roman", "Noto Serif SC", serif'>Times New Roman</MenuItem>
+              <MenuItem value='Arial, "Noto Sans SC", sans-serif'>Arial</MenuItem>
+              <MenuItem value='"Helvetica Neue", Helvetica, "Noto Sans SC", sans-serif'>Helvetica</MenuItem>
+              <MenuItem value='var(--font-geist-mono), "Courier New", monospace'>Geist Mono</MenuItem>
             </Select>
           </FormControl>
           
@@ -995,22 +1016,35 @@ function EditorPageContent() {
               onChange={(e) => setCustomHeadingFont(e.target.value)}
             >
               <MenuItem value="">默认</MenuItem>
-              <MenuItem value='"Arial", "Noto Sans SC", sans-serif'>Arial</MenuItem>
-              <MenuItem value='"Helvetica", "Noto Sans SC", sans-serif'>Helvetica</MenuItem>
-              <MenuItem value='"Times New Roman", "Noto Serif SC", serif'>Times New Roman</MenuItem>
+              <MenuItem value='var(--font-inter), "Noto Sans SC", sans-serif'>Inter</MenuItem>
+              <MenuItem value='var(--font-roboto), "Noto Sans SC", sans-serif'>Roboto</MenuItem>
+              <MenuItem value='var(--font-source-sans-3), "Noto Sans SC", sans-serif'>Source Sans 3</MenuItem>
+              <MenuItem value='var(--font-open-sans), "Noto Sans SC", sans-serif'>Open Sans</MenuItem>
+              <MenuItem value='var(--font-lato), "Noto Sans SC", sans-serif'>Lato</MenuItem>
+              <MenuItem value='var(--font-montserrat), "Noto Sans SC", sans-serif'>Montserrat</MenuItem>
+              <MenuItem value='var(--font-raleway), "Noto Sans SC", sans-serif'>Raleway</MenuItem>
+              <MenuItem value='var(--font-poppins), "Noto Sans SC", sans-serif'>Poppins</MenuItem>
+              <MenuItem value='var(--font-playfair-display), "Noto Serif SC", serif'>Playfair Display</MenuItem>
+              <MenuItem value='var(--font-merriweather), "Noto Serif SC", serif'>Merriweather</MenuItem>
+              <MenuItem value='var(--font-lora), "Noto Serif SC", serif'>Lora</MenuItem>
+              <MenuItem value='var(--font-crimson-text), "Noto Serif SC", serif'>Crimson Text</MenuItem>
+              <MenuItem value='var(--font-libre-baskerville), "Noto Serif SC", serif'>Libre Baskerville</MenuItem>
+              <MenuItem value='var(--font-noto-sans-sc), sans-serif'>思源黑体</MenuItem>
+              <MenuItem value='var(--font-noto-serif-sc), serif'>思源宋体</MenuItem>
+              <MenuItem value='"PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif'>苹方/微软雅黑</MenuItem>
+              <MenuItem value='"STKaiti", "KaiTi", "Noto Serif SC", serif'>楷体</MenuItem>
               <MenuItem value='"Georgia", "Noto Serif SC", serif'>Georgia</MenuItem>
-              <MenuItem value='"Source Sans 3", "Noto Sans SC", sans-serif'>Source Sans 3</MenuItem>
-              <MenuItem value='"Inter", "Noto Sans SC", sans-serif'>Inter</MenuItem>
-              <MenuItem value='"Roboto", "Noto Sans SC", sans-serif'>Roboto</MenuItem>
-              <MenuItem value='"Poppins", "Noto Sans SC", sans-serif'>Poppins</MenuItem>
+              <MenuItem value='"Times New Roman", "Noto Serif SC", serif'>Times New Roman</MenuItem>
+              <MenuItem value='Arial, "Noto Sans SC", sans-serif'>Arial</MenuItem>
+              <MenuItem value='"Helvetica Neue", Helvetica, "Noto Sans SC", sans-serif'>Helvetica</MenuItem>
             </Select>
           </FormControl>
           
           <FormControl size="small" sx={{ minWidth: 100 }}>
-            <InputLabel>字号</InputLabel>
+            <InputLabel>正文字号</InputLabel>
             <Select
               value={customFontSize}
-              label="字号"
+              label="正文字号"
               onChange={(e) => setCustomFontSize(e.target.value)}
             >
               <MenuItem value="">默认</MenuItem>
@@ -1019,23 +1053,73 @@ function EditorPageContent() {
               <MenuItem value="10pt">10pt</MenuItem>
               <MenuItem value="11pt">11pt</MenuItem>
               <MenuItem value="12pt">12pt</MenuItem>
+              <MenuItem value="13pt">13pt</MenuItem>
               <MenuItem value="14pt">14pt</MenuItem>
+              <MenuItem value="15pt">15pt</MenuItem>
+              <MenuItem value="16pt">16pt</MenuItem>
             </Select>
           </FormControl>
           
           <FormControl size="small" sx={{ minWidth: 100 }}>
-            <InputLabel>行高</InputLabel>
+            <InputLabel>正文行高</InputLabel>
             <Select
               value={customLineHeight}
-              label="行高"
+              label="正文行高"
               onChange={(e) => setCustomLineHeight(e.target.value)}
             >
               <MenuItem value="">默认</MenuItem>
+              <MenuItem value="1.0">1.0</MenuItem>
               <MenuItem value="1.2">1.2</MenuItem>
+              <MenuItem value="1.3">1.3</MenuItem>
+              <MenuItem value="1.4">1.4</MenuItem>
+              <MenuItem value="1.5">1.5</MenuItem>
+              <MenuItem value="1.6">1.6</MenuItem>
+              <MenuItem value="1.7">1.7</MenuItem>
+              <MenuItem value="1.8">1.8</MenuItem>
+              <MenuItem value="2.0">2.0</MenuItem>
+            </Select>
+          </FormControl>
+          
+          <FormControl size="small" sx={{ minWidth: 100 }}>
+            <InputLabel>标题字号</InputLabel>
+            <Select
+              value={customHeadingFontSize}
+              label="标题字号"
+              onChange={(e) => setCustomHeadingFontSize(e.target.value)}
+            >
+              <MenuItem value="">默认</MenuItem>
+              <MenuItem value="12pt">12pt</MenuItem>
+              <MenuItem value="14pt">14pt</MenuItem>
+              <MenuItem value="16pt">16pt</MenuItem>
+              <MenuItem value="18pt">18pt</MenuItem>
+              <MenuItem value="20pt">20pt</MenuItem>
+              <MenuItem value="22pt">22pt</MenuItem>
+              <MenuItem value="24pt">24pt</MenuItem>
+              <MenuItem value="28pt">28pt</MenuItem>
+              <MenuItem value="32pt">32pt</MenuItem>
+              <MenuItem value="36pt">36pt</MenuItem>
+              <MenuItem value="40pt">40pt</MenuItem>
+              <MenuItem value="48pt">48pt</MenuItem>
+            </Select>
+          </FormControl>
+          
+          <FormControl size="small" sx={{ minWidth: 100 }}>
+            <InputLabel>标题行高</InputLabel>
+            <Select
+              value={customHeadingLineHeight}
+              label="标题行高"
+              onChange={(e) => setCustomHeadingLineHeight(e.target.value)}
+            >
+              <MenuItem value="">默认</MenuItem>
+              <MenuItem value="1.0">1.0</MenuItem>
+              <MenuItem value="1.1">1.1</MenuItem>
+              <MenuItem value="1.2">1.2</MenuItem>
+              <MenuItem value="1.3">1.3</MenuItem>
               <MenuItem value="1.4">1.4</MenuItem>
               <MenuItem value="1.5">1.5</MenuItem>
               <MenuItem value="1.6">1.6</MenuItem>
               <MenuItem value="1.8">1.8</MenuItem>
+              <MenuItem value="2.0">2.0</MenuItem>
             </Select>
           </FormControl>
           
@@ -1047,6 +1131,8 @@ function EditorPageContent() {
               setCustomFontSize('');
               setCustomLineHeight('');
               setCustomHeadingFont('');
+              setCustomHeadingFontSize('');
+              setCustomHeadingLineHeight('');
             }}
           >
             重置字体
@@ -1189,6 +1275,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1201,6 +1289,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1213,6 +1303,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1225,6 +1317,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1238,6 +1332,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1370,6 +1466,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1382,6 +1480,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1394,6 +1494,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1406,6 +1508,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}
@@ -1419,6 +1523,8 @@ function EditorPageContent() {
                     fontSize: customFontSize || undefined,
                     lineHeight: customLineHeight || undefined,
                     headingFont: customHeadingFont || undefined,
+                    headingFontSize: customHeadingFontSize || undefined,
+                    headingLineHeight: customHeadingLineHeight || undefined,
                   }}
                 />
               )}

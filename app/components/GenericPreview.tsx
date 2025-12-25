@@ -30,17 +30,19 @@ interface GenericPreviewProps {
     fontSize?: string;
     lineHeight?: string;
     headingFont?: string;
+    headingFontSize?: string;
+    headingLineHeight?: string;
   };
 }
 
 // 递归渲染值
 function RenderValue({ value, depth = 0, primaryColor, secondaryColor, accentColor, borderColor, maxDepth = 10 }: { value: any; depth?: number; primaryColor: string; secondaryColor: string; accentColor: string; borderColor: string; maxDepth?: number }) {
   if (value === null || value === undefined) {
-    return <Typography variant="body2" sx={{ color: secondaryColor, fontStyle: 'italic', fontSize: '9pt' }}>null</Typography>;
+    return <Typography variant="body2" sx={{ color: secondaryColor, fontStyle: 'italic', fontSize: '0.9em' }}>null</Typography>;
   }
 
   if (typeof value === 'boolean') {
-    return <Chip label={value.toString()} size="small" color={value ? 'success' : 'default'} sx={{ fontSize: '8.5pt' }} />;
+    return <Chip label={value.toString()} size="small" color={value ? 'success' : 'default'} sx={{ fontSize: '0.85em' }} />;
   }
 
   if (typeof value === 'number') {
@@ -53,7 +55,7 @@ function RenderValue({ value, depth = 0, primaryColor, secondaryColor, accentCol
           borderColor: accentColor, 
           color: accentColor,
           fontFamily: 'monospace',
-          fontSize: '8.5pt'
+          fontSize: '0.85em'
         }} 
       />
     );
@@ -416,6 +418,8 @@ export default function GenericPreview({ data, title, theme, customTypography }:
   const fontSize = customTypography?.fontSize || theme?.typography.fontSize || '9.5pt';
   const lineHeight = customTypography?.lineHeight || theme?.typography.lineHeight || '1.5';
   const headingFont = customTypography?.headingFont || theme?.typography.headingFont || fontFamily;
+  const headingFontSize = theme?.typography.headingFontSize;
+  const headingLineHeight = theme?.typography.headingLineHeight || lineHeight;
 
   // 检测顶层结构，提供更好的分组显示
   const topLevelKeys = Object.keys(data);
@@ -429,18 +433,27 @@ export default function GenericPreview({ data, title, theme, customTypography }:
       color: textColor, 
       fontFamily, 
       fontSize, 
-      lineHeight 
+      lineHeight,
+      '& .MuiTypography-root': {
+        fontFamily: 'inherit',
+        lineHeight: 'inherit',
+      },
+      '& .MuiTypography-h5, & .MuiTypography-h6': {
+        fontFamily: headingFont,
+        fontSize: headingFontSize || 'inherit',
+        lineHeight: headingLineHeight,
+      },
     }}>
       {/* 头部 */}
       {title && (
         <Paper elevation={1} sx={{ p: 1.5, mx: 3, mt: 3, mb: 1.5, bgcolor: primaryColor, color: 'white' }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <DescriptionIcon sx={{ fontSize: '20px' }} />
-            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '16pt', fontFamily: headingFont }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.6em', fontFamily: headingFont }}>
               {title}
             </Typography>
           </Stack>
-          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '9pt' }}>
+          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.9em' }}>
             {topLevelKeys.length} 个字段
           </Typography>
         </Paper>

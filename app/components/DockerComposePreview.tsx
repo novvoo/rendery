@@ -30,6 +30,8 @@ interface DockerComposePreviewProps {
     fontSize?: string;
     lineHeight?: string;
     headingFont?: string;
+    headingFontSize?: string;
+    headingLineHeight?: string;
   };
 }
 
@@ -68,14 +70,14 @@ function CollapsibleServiceCard({
         <IconButton size="small" sx={{ mr: 0.5 }}>
           {expanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
         </IconButton>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '11pt', flexGrow: 1 }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1em', flexGrow: 1 }}>
           {name}
         </Typography>
         {config.image && !expanded && (
           <Chip 
             label={config.image} 
             size="small" 
-            sx={{ fontSize: '7pt', maxWidth: '200px' }} 
+            sx={{ fontSize: '0.7em', maxWidth: '200px' }} 
           />
         )}
       </Box>
@@ -86,10 +88,10 @@ function CollapsibleServiceCard({
               <TableBody>
                 {config.image && (
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'medium', color: secondaryColor, width: '25%', fontSize: '9pt' }}>
+                    <TableCell sx={{ fontWeight: 'medium', color: secondaryColor, width: '25%', fontSize: '0.9em' }}>
                       镜像
                     </TableCell>
-                    <TableCell sx={{ fontFamily: 'monospace', fontSize: '9pt', wordBreak: 'break-all' }}>
+                    <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.9em', wordBreak: 'break-all' }}>
                       {config.image}
                     </TableCell>
                   </TableRow>
@@ -380,6 +382,8 @@ export default function DockerComposePreview({ data, theme, customTypography }: 
   const fontSize = customTypography?.fontSize || theme?.typography.fontSize || '9.5pt';
   const lineHeight = customTypography?.lineHeight || theme?.typography.lineHeight || '1.5';
   const headingFont = customTypography?.headingFont || theme?.typography.headingFont || fontFamily;
+  const headingFontSize = theme?.typography.headingFontSize;
+  const headingLineHeight = theme?.typography.headingLineHeight || lineHeight;
 
   return (
     <Box className="docker-compose-preview" sx={{ 
@@ -389,15 +393,24 @@ export default function DockerComposePreview({ data, theme, customTypography }: 
       color: textColor, 
       fontFamily, 
       fontSize,
-      lineHeight
+      lineHeight,
+      '& .MuiTypography-root': {
+        fontFamily: 'inherit',
+        lineHeight: 'inherit',
+      },
+      '& .MuiTypography-h5, & .MuiTypography-h6': {
+        fontFamily: headingFont,
+        fontSize: headingFontSize || 'inherit',
+        lineHeight: headingLineHeight,
+      },
     }}>
       {/* 头部 */}
       <Paper elevation={1} sx={{ p: 1.5, mx: 3, mt: 3, mb: 1.5, bgcolor: primaryColor, color: 'white' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '16pt', fontFamily: headingFont }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.6em', fontFamily: headingFont }}>
           Docker Compose 配置
         </Typography>
         {version && (
-          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '9pt' }}>
+          <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.9em' }}>
             版本: {version}
           </Typography>
         )}
@@ -406,8 +419,8 @@ export default function DockerComposePreview({ data, theme, customTypography }: 
       {/* 服务列表 */}
       {services && Object.keys(services).length > 0 && (
         <Box sx={{ mb: 2, mx: 3 }}>
-          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '13pt', fontFamily: headingFont }}>
-            <StorageIcon sx={{ fontSize: '16px', mr: 0.5, verticalAlign: 'middle' }} />
+          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '1.3em', fontFamily: headingFont }}>
+            <StorageIcon sx={{ fontSize: '1.6em', mr: 0.5, verticalAlign: 'middle' }} />
             服务 ({Object.keys(services).length})
           </Typography>
           
@@ -431,8 +444,8 @@ export default function DockerComposePreview({ data, theme, customTypography }: 
       {/* 网络 */}
       {networks && Object.keys(networks).length > 0 && (
         <Box sx={{ mb: 2, mx: 3 }}>
-          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '13pt', fontFamily: headingFont }}>
-            <NetworkCheckIcon sx={{ fontSize: '16px', mr: 0.5, verticalAlign: 'middle' }} />
+          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '1.3em', fontFamily: headingFont }}>
+            <NetworkCheckIcon sx={{ fontSize: '1.6em', mr: 0.5, verticalAlign: 'middle' }} />
             网络 ({Object.keys(networks).length})
           </Typography>
           
@@ -458,8 +471,8 @@ export default function DockerComposePreview({ data, theme, customTypography }: 
       {/* 数据卷 */}
       {volumes && Object.keys(volumes).length > 0 && (
         <Box sx={{ mx: 3, mb: 3 }}>
-          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '13pt', fontFamily: headingFont }}>
-            <FolderIcon sx={{ fontSize: '16px', mr: 0.5, verticalAlign: 'middle' }} />
+          <Typography variant="h6" sx={{ color: primaryColor, fontWeight: 'bold', mb: 1, fontSize: '1.3em', fontFamily: headingFont }}>
+            <FolderIcon sx={{ fontSize: '1.6em', mr: 0.5, verticalAlign: 'middle' }} />
             数据卷 ({Object.keys(volumes).length})
           </Typography>
           

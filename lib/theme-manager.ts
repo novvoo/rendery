@@ -23,6 +23,8 @@ export interface ThemeTypography {
   fontSize: string;
   lineHeight: string;
   headingFont?: string;
+  headingFontSize?: string;
+  headingLineHeight?: string;
 }
 
 export interface Theme {
@@ -55,10 +57,10 @@ export const themes: Theme[] = [
       connections: 'rgb(100, 100, 100)',
     },
     typography: {
-      fontFamily: '"Source Sans 3", "Noto Sans SC", sans-serif',
+      fontFamily: 'var(--font-source-sans-3), "Noto Sans SC", sans-serif',
       fontSize: '10pt',
       lineHeight: '1.5',
-      headingFont: '"Source Sans 3", "Noto Sans SC", sans-serif',
+      headingFont: 'var(--font-source-sans-3), "Noto Sans SC", sans-serif',
     },
   },
   {
@@ -80,10 +82,10 @@ export const themes: Theme[] = [
       connections: 'rgb(107, 114, 128)',
     },
     typography: {
-      fontFamily: '"Inter", "Noto Sans SC", sans-serif',
+      fontFamily: 'var(--font-inter), "Noto Sans SC", sans-serif',
       fontSize: '10pt',
       lineHeight: '1.6',
-      headingFont: '"Inter", "Noto Sans SC", sans-serif',
+      headingFont: 'var(--font-inter), "Noto Sans SC", sans-serif',
     },
   },
   {
@@ -105,10 +107,10 @@ export const themes: Theme[] = [
       connections: 'rgb(100, 100, 100)',
     },
     typography: {
-      fontFamily: '"Helvetica Neue", "Noto Sans SC", sans-serif',
+      fontFamily: '"Helvetica Neue", Helvetica, "Noto Sans SC", sans-serif',
       fontSize: '10pt',
       lineHeight: '1.5',
-      headingFont: '"Helvetica Neue", "Noto Sans SC", sans-serif',
+      headingFont: '"Helvetica Neue", Helvetica, "Noto Sans SC", sans-serif',
     },
   },
   {
@@ -130,10 +132,10 @@ export const themes: Theme[] = [
       connections: 'rgb(85, 85, 85)',
     },
     typography: {
-      fontFamily: '"Roboto", "Noto Sans SC", sans-serif',
+      fontFamily: 'var(--font-roboto), "Noto Sans SC", sans-serif',
       fontSize: '10pt',
       lineHeight: '1.4',
-      headingFont: '"Roboto", "Noto Sans SC", sans-serif',
+      headingFont: 'var(--font-roboto), "Noto Sans SC", sans-serif',
     },
   },
   {
@@ -155,10 +157,10 @@ export const themes: Theme[] = [
       connections: 'rgb(128, 128, 128)',
     },
     typography: {
-      fontFamily: '"Latin Modern Roman", serif',
+      fontFamily: 'var(--font-lora), "Noto Serif SC", serif',
       fontSize: '11pt',
       lineHeight: '1.5',
-      headingFont: '"Latin Modern Roman", serif',
+      headingFont: 'var(--font-lora), "Noto Serif SC", serif',
     },
   },
   {
@@ -180,10 +182,10 @@ export const themes: Theme[] = [
       connections: 'rgb(107, 114, 128)',
     },
     typography: {
-      fontFamily: '"Poppins", "Noto Sans SC", sans-serif',
+      fontFamily: 'var(--font-poppins), "Noto Sans SC", sans-serif',
       fontSize: '10pt',
       lineHeight: '1.6',
-      headingFont: '"Poppins", "Noto Sans SC", sans-serif',
+      headingFont: 'var(--font-playfair-display), "Noto Serif SC", serif',
     },
   },
   {
@@ -208,7 +210,7 @@ export const themes: Theme[] = [
       fontFamily: '"Georgia", "Noto Serif SC", serif',
       fontSize: '10pt',
       lineHeight: '1.5',
-      headingFont: '"Georgia", "Noto Serif SC", serif',
+      headingFont: 'var(--font-merriweather), "Noto Serif SC", serif',
     },
   },
 ];
