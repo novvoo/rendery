@@ -1,12 +1,16 @@
 'use client';
 
 import { Theme } from '@/lib/theme-manager';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import StorageIcon from '@mui/icons-material/Storage';
 import {
     Box,
     Chip,
+    Collapse,
+    IconButton,
     Paper,
     Stack,
     Table,
@@ -16,6 +20,7 @@ import {
     TableRow,
     Typography
 } from '@mui/material';
+import { useState } from 'react';
 
 interface DockerComposePreviewProps {
   data: any;
