@@ -36,7 +36,7 @@ import {
 } from '@mui/material';
 import yaml from 'js-yaml';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import CVPreview from '../components/CVPreview';
 import DockerComposePreview from '../components/DockerComposePreview';
 import GenericPreview from '../components/GenericPreview';
@@ -483,6 +483,20 @@ prod:
 };
 
 export default function EditorPage() {
+  return (
+    <Suspense fallback={
+      <Layout>
+        <Box sx={{ my: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      </Layout>
+    }>
+      <EditorPageContent />
+    </Suspense>
+  );
+}
+
+function EditorPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);

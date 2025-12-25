@@ -1,7 +1,7 @@
 "use client";
 
 import { getAllThemes } from '@/lib/theme-manager';
-import { CVDocument } from '@/types/cv';
+import { CVDocument, Design } from '@/types/cv';
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import CVPreview from './CVPreview';
@@ -86,7 +86,7 @@ export default function ThemeComparison({ cvData, onSelectTheme }: ThemeComparis
                   <CVPreview 
                     data={{
                       ...cvData,
-                      design: { theme: themeId },
+                      design: { theme: themeId as Design['theme'] },
                     }} 
                   />
                 </Box>

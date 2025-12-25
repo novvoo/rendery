@@ -2,6 +2,7 @@
 
 import ThemeComparison from '@/app/components/ThemeComparison';
 import { getAllThemes } from '@/lib/theme-manager';
+import { Design } from '@/types/cv';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CompareIcon from '@mui/icons-material/Compare';
 import { Box, Button, Card, CardContent, Chip, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
@@ -196,7 +197,7 @@ export default function ThemePreviewPage() {
                     <CVPreview 
                       data={{
                         ...sampleCV,
-                        design: { theme: selectedTheme },
+                        design: { theme: selectedTheme as Design['theme'] },
                       }} 
                     />
                   </Box>

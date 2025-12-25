@@ -6,6 +6,7 @@ import { Box, Button, Card, CardContent, Dialog, DialogContent, DialogTitle, Gri
 import yaml from 'js-yaml';
 import { useState } from 'react';
 import CVPreview from '../components/CVPreview';
+import GenericPreview from '../components/GenericPreview';
 import Layout from '../components/Layout';
 
 const examples = {
